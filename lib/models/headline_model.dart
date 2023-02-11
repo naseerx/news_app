@@ -27,6 +27,7 @@ class Article {
     required this.summary,
     required this.authors,
     required this.media,
+    required this.clearUrl,
 
   });
 
@@ -36,6 +37,7 @@ class Article {
   String summary;
   dynamic authors;
   dynamic media;
+  dynamic clearUrl;
 
 
   factory Article.fromJson(Map<String, dynamic> json) =>
@@ -46,6 +48,7 @@ class Article {
         summary: json["summary"],
         media: json["media"],
         authors: json["authors"],
+        clearUrl: json["clean_url"],
 
       );
 }

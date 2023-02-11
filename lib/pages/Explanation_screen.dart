@@ -5,15 +5,12 @@ import 'package:intl/intl.dart';
 import 'constant.dart';
 
 class ExplanationScreen extends StatefulWidget {
-  final String tag;
+
   final String name;
-  final String image;
   final Article data;
   const ExplanationScreen({
     Key? key,
-    required this.tag,
     required this.name,
-    required this.image,
     required this.data,
   }) : super(key: key);
 
@@ -36,7 +33,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 184, 0, 0),
-            title: Text('Explanation Screen'),
+            title: const Text('Explanation Screen'),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout_outlined),
@@ -63,9 +60,6 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                     children: [
                       Row(
                         children: [
-                          CircleAvatar(
-                            backgroundImage: AssetImage(widget.image),
-                          ),
                           const SizedBox(
                             width: 10,
                           ),
@@ -73,7 +67,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.name,
+                                widget.name.toUpperCase(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,

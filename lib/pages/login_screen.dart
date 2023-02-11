@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/pages/phone.dart';
 import 'package:fyp/pages/register_screen.dart';
 import 'package:ndialog/ndialog.dart';
 
@@ -7,20 +9,22 @@ import 'constant.dart';
 import 'Forgot_screen.dart';
 import 'main_screen.dart';
 
-class login_screen extends StatefulWidget {
-  const login_screen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<login_screen> createState() => _login_screenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _login_screenState extends State<login_screen> {
+class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
   bool visible = true;
 
   next() {
-    print('object');
+    if (kDebugMode) {
+      print('object');
+    }
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -68,7 +72,7 @@ class _login_screenState extends State<login_screen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
         image: Bimg,
         fit: BoxFit.cover,
@@ -80,43 +84,43 @@ class _login_screenState extends State<login_screen> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 80,
                 ),
                 const Text(
                   'Welcome Back',
                   style: TextStyle(color: Colors.white, fontSize: 33),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 TextField(
                   controller: emailController,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                       suffixIcon:
-                          Icon(Icons.email_outlined, color: Colors.black),
+                          const Icon(Icons.email_outlined, color: Colors.black),
                       fillColor: Colors.white,
                       filled: true,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.black,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.black,
                         ),
                       ),
                       hintText: "Email",
-                      hintStyle: TextStyle(color: Colors.black),
+                      hintStyle: const TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextField(
@@ -130,23 +134,23 @@ class _login_screenState extends State<login_screen> {
                               visible = !visible;
                             });
                           },
-                          icon: Icon(Icons.remove_red_eye)),
+                          icon: const Icon(Icons.remove_red_eye)),
                       fillColor: Colors.white,
                       filled: true,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.black,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.black,
                         ),
                       ),
                       hintText: "Password",
-                      hintStyle: TextStyle(color: Colors.black),
+                      hintStyle: const TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
@@ -218,14 +222,14 @@ class _login_screenState extends State<login_screen> {
                           width: 20,
                         ),
                         Text(
-                          'SIGN WITH EMAIL',
+                          'SIGN WITH GOOGLE',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 30,
                   thickness: 2,
                   color: Colors.white,
@@ -239,10 +243,12 @@ class _login_screenState extends State<login_screen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const PhoneNumberScreen()));
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Icon(Icons.local_phone_outlined),
                         SizedBox(
                           width: 20,
@@ -255,7 +261,7 @@ class _login_screenState extends State<login_screen> {
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 30,
                   thickness: 2,
                   color: Colors.white,
@@ -263,7 +269,7 @@ class _login_screenState extends State<login_screen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Dont have an account ? ',
                       style: TextStyle(
                         color: Colors.white,
@@ -275,12 +281,12 @@ class _login_screenState extends State<login_screen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => register_screen(),
+                              builder: (context) => const register_screen(),
                             ));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             "Register",
                             style: TextStyle(

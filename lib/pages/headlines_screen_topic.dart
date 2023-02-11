@@ -102,9 +102,7 @@ class _HeadlinesScreenTopicsState extends State<HeadlinesScreenTopics> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ExplanationScreen(
-                                  tag: widget.tag,
                                   name: widget.name,
-                                  image: widget.image,
                                   data: data,
                                 ),
                               ));

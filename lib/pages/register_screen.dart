@@ -298,7 +298,7 @@ class _register_screenState extends State<register_screen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const login_screen()));
+                                              const LoginScreen()));
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

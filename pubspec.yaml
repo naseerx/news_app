@@ -43,6 +43,9 @@ dependencies:
   ndialog: ^4.3.0
   http: ^0.13.5
   intl: ^0.17.0
+  delayed_display: ^2.0.0
+  intl_phone_number_input: ^0.7.1
+  pinput: ^2.2.17
 #  fluttertoast:
 
 dev_dependencies:
