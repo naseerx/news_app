@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     const CategoriesScreen(),
     const ChannelsScreen(),
-    const bookmark_screen(),
+    const BookMarkScreen(),
   ];
   int currentindex=0;
   void onTap(int index){

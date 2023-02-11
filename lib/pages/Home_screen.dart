@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -26,11 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamController _streamController;
   late Stream stream;
   String token = apiKey;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var dateFormat = DateFormat('dd MM yy h:mm: aa');
 
   //            *************************************   API   ******************************
-//method of calling api from server
+
   getProfileApi() async {
     try {
       _streamController.add('loading');
@@ -256,9 +258,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       const Spacer(),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          try {
+                                            User? user = FirebaseAuth.instance.currentUser;
+                                            firestore
+                                                .collection('data')
+                                                .doc()
+                                                .set({
+                                              "date": dateFormat.format(data.publishedDate).toString(),
+                                              "title": data.title,
+                                              "summary": data.summary,
+                                              "source": data.clearUrl,
+                                              "image": data.media,
+                                              "excerpt": data.excerpt,
+                                              "uid": user?.uid,
+                                            });
+                                            print('ok');
+                                          } on Exception catch (e) {
+                                            print(e.toString());
+                                          }
+                                        },
                                         icon: const Icon(
-                                          Icons.bookmark,
+                                          Icons.bookmark_border,
                                           color: Colors.white,
                                         ),
                                       ),

@@ -1,20 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import 'Explanation_screen.dart';
+import '../models/get_data_model.dart';
+import 'bookmark_details_screen.dart';
+import 'constant.dart';
 
-class bookmark_screen extends StatefulWidget {
-  const bookmark_screen({Key? key}) : super(key: key);
+class BookMarkScreen extends StatefulWidget {
+  const BookMarkScreen({Key? key}) : super(key: key);
 
   @override
-  State<bookmark_screen> createState() => _bookmark_screenState();
+  State<BookMarkScreen> createState() => _BookMarkScreenState();
 }
 
-class _bookmark_screenState extends State<bookmark_screen> {
+class _BookMarkScreenState extends State<BookMarkScreen> {
+  var dateFormat = DateFormat('dd MM yy h:mm: aa');
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/register.png'), fit: BoxFit.cover),
       ),
@@ -23,8 +29,9 @@ class _bookmark_screenState extends State<bookmark_screen> {
           title: Text('saved'),
           actions: [
             IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.search),),
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            ),
             IconButton(
               icon: const Icon(Icons.logout_outlined),
               onPressed: () {},
@@ -34,86 +41,145 @@ class _bookmark_screenState extends State<bookmark_screen> {
           backgroundColor: Color.fromARGB(255, 184, 0, 0),
         ),
         backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 20,),
-              Text('Saved',style: TextStyle(color: Colors.white, fontSize: 30,fontWeight: FontWeight.bold)),
-              ListView.builder(
-                shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 50,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(0.1),
-                      child: InkWell(
-                        onTap: (){
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           ExplanationScreen(),
-                          //     ));
-                        },
-                        child: Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(width: 3, color: Colors.white,)),
-                          color: Color.fromARGB(255, 184, 0, 0),
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image(
-                                    image: AssetImage('assets/1.jpg'),
-                                    width: 130,
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('data')
+              .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              );
+            } else {
+
+              return snapshot.data!.docs.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data!.docs[index];
+                        GetBookMarkModel data = GetBookMarkModel.fromMap(
+                            snapshot.data!.docs[index]);
+                        return snapshot.data!.docs.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BookMarkDetailsScreen(
+                                                  image: data.image,
+                                                  title: data.title,
+                                                  source: data.source,
+                                                  summary: data.summary,
+                                                  date: data.date,
+                                                  excerpt: data.excerpt, id:ds.id,),
+                                        ));
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: const BorderSide(
+                                          width: 4,
+                                          color: Colors.white,
+                                        )),
+                                    color: Kcolor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: data.image.isNotEmpty
+                                                    ? FadeInImage(
+                                                        height: 100,
+                                                        width: 100,
+                                                        placeholder:
+                                                            const AssetImage(
+                                                                'assets/1.jpg'),
+                                                        image: NetworkImage(
+                                                            data.image))
+                                                    : Image.asset(
+                                                        'assets/1.jpg',
+                                                        height: 100,
+                                                        width: 100,
+                                                      ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    data.source,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    data.date,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(
+                                            data.title,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 10,),
-                                        CircleAvatar(backgroundImage: AssetImage('assets/bbc1.png'),),
-                                        SizedBox(width: 6,),
-                                        Text('News Name\t',style: TextStyle(color: Colors.white, fontSize: 13, ),),
-                                        Text('Time\t',style: TextStyle(color: Colors.white, fontSize: 6),),
-                                        SizedBox(width: 7,),
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.bookmark, color: Colors.white,),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 1,),
-                                    Padding(
-                                      padding: const EdgeInsets.all(7),
-                                      child: Container(
-                                        width: 150,
-                                        child: Column(
-                                          children: [
-                                            Text('Leatest News Heading ',style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, ),),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                              )
+                            : const Center(
+                                child: Text(
+                                  'No Bookmark added yet',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              );
+                      },
+                    )
+                  : const Center(
+                      child: Text(
+                        'No Bookmark added yet',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     );
-                  }),
-            ],
-          ),
+            }
+          },
         ),
       ),
     );
