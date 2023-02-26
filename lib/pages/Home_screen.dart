@@ -261,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onPressed: () {
                                           try {
                                             User? user = FirebaseAuth.instance.currentUser;
-                                            firestore
+                                            FirebaseFirestore.instance
                                                 .collection('data')
                                                 .doc()
                                                 .set({

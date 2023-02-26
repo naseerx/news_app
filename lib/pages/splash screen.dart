@@ -34,6 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Text('WORLD LOOKOUT',style: KsplashFont),
             ],
           ),
+            // 9lZegggZ9FbMGaOZtAQx4Mr-bXQ8EUmKOeSxYWd_FD4
           nextScreen: const register_screen(),
           splashIconSize: 250,
           duration: 4000,
